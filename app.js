@@ -13,11 +13,11 @@ const io = socketio(server)
 
 
 io.on('connection', (socket) => {
-console.log("someone joined the socket")
+    console.log("someone joined using socket");
 
-socket.on('disconnect', () => {
-    console.log("socket connection broke")
-})
+    socket.on('disconnect', () => {
+        console.log("socket connection broke");
+    })
 })
 
 
