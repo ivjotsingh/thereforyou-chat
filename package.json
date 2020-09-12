@@ -1,0 +1,25 @@
+{
+  "name": "thereforyou-chat",
+  "version": "1.0.0",
+  "description": "anonymous chat application",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-p:ivjotsingh/thereforyou-chat.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "author": "there-for-you-team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0"
+  }
+}
