@@ -15,6 +15,10 @@ const io = socketio(server)
 io.on('connection', (socket) => {
     console.log("someone joined using socket");
 
+    socket.on('join', ({name, companion}, callback) => {
+        console.log(name, companion);
+    });
+
     socket.on('disconnect', () => {
         console.log("socket connection broke");
     })
