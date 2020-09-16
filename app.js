@@ -5,7 +5,7 @@ const http = require('http');
 const PORT = process.env.PORT || 8000
 
 const joinRoute = require('./routes/join');
-
+const {createGroup} = require('./utils/group');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,7 +16,12 @@ io.on('connection', (socket) => {
     console.log("someone joined using socket");
 
     socket.on('join', ({name, companion}, callback) => {
-        console.log(name, companion);
+        const {groupName, error} = createGroup(name, companion)
+        console.log(groupName, error);
+
+        if (error) return callback(error);
+
+        socket.join(groupName)
     });
 
     socket.on('disconnect', () => {

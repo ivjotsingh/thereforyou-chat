@@ -1,12 +1,17 @@
 const createGroup = (user, companion) => {
 
     // in database check if user&companion or companion&user return that group else
+    try{
+        group = {
+            groupName: `${user}&${companion}`
+        }
 
-    group = {
-        name: `${user}&${companion}`
+        return group
+    }
+    catch{
+        return {error: 'message'}
     }
 
-    return group
 }
 
 
