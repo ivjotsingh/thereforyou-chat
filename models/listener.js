@@ -15,15 +15,16 @@ const ListenerSchema = mongoose.Schema({
   sessions: [
     {
       topic: {
-        type: Topic,
+        type: Map,
+        of: Number,
         required: true,
-      },
-      overallRating: {
-        type: Number,
-        default: 0,
       },
     },
   ],
+  overallRating: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("Listener", ListenerSchema);
