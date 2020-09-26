@@ -8,11 +8,11 @@ const MessageSchema = mongoose.Schema({
     min: 1,
   },
   from: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId, //user_id
     required: true,
   },
   to: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId, //room_id
     required: true,
   },
 
