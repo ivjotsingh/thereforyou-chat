@@ -1,7 +1,9 @@
 const User = require("../models/user");
 const Member = require("../models/member");
 
-exports.CreateMember = (name, topic) => {
+/*Will create Member if the user is not already a Member,
+else just add a session to already created Member*/
+exports.CreateMember = async (name, topic) => {
   try {
     //dependency to create a Listener
     let user = User.findOne({
@@ -10,36 +12,35 @@ exports.CreateMember = (name, topic) => {
 
     if (user) {
       let member = Member.findOne({ userId: user._id });
-      if (member){
-          try{
-          let sessionCount=member.sessions.get(topic);
-          let session=Map(String,Number);
-          session.set(topic,sessionCount+1);
-        }
-        catch(err){
-            let session=Map(String,Number);
-            session.set(topic,1);
-            member.sessions=session;
+      let member_data;
+      if (member) {
+        try {
+          let sessionCount = member.sessions.get(topic);
+          let session = Map(String, Number);
+          session.set(topic, sessionCount + 1);
+        } catch (err) {
+          let session = Map(String, Number);
+          session.set(topic, 1);
+          member.sessions = session;
         }
 
-          await member.save();
-      }
-      else{
-        let session=new Map(String,Number);
-        session.set(topic,1)
+        member_data = await member.save();
+      } else {
+        let session = new Map(String, Number);
+        session.set(topic, 1);
         let member = new Member({
-        userId: user._id,
-        isOnline: true,
-        //adding session
-        sessions: session});
-        await member.save();
-        };
+          userId: user._id,
+          isOnline: true,
+          //adding session
+          sessions: session,
+        });
+        member_data = await member.save();
+      }
+    } else {
+      return { error: "User does not exists" };
     }
-    else    { return {error:"User does not exists"}}
-return {room:topic};
-}
-catch(err){
-    return {error:err} ;
- 
+    return { memberId: member_data._id };
+  } catch (err) {
+    return { error: err };
+  }
 };
-}

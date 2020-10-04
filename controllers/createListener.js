@@ -1,7 +1,10 @@
 const User = require("../models/user");
 const Listener = require("../models/listener");
 
-exports.CreateListener = (name, topic) => {
+/*Will create Listener if the user is not already a listener,
+else just add a session to already created Listener*/
+
+exports.CreateListener = async (name, topic) => {
   try {
     //dependency to create a Listener
     let user = User.findOne({
@@ -10,46 +13,40 @@ exports.CreateListener = (name, topic) => {
 
     if (user) {
       let listener = Listener.findOne({ userId: user._id });
-
-      //User already been a listener before
-      if (listener){
-          try{
-          let sessionCount=listener.sessions.get(topic);
-          let session=Map(String,Number);
-          session.set(topic,sessionCount+1);
+      let listener_data;
+      //if User already been a listener before
+      if (listener) {
+        try {
+          let sessionCount = listener.sessions.get(topic);
+          let session = Map(String, Number);
+          session.set(topic, sessionCount + 1);
+        } catch (err) {
+          let session = Map(String, Number);
+          session.set(topic, 1);
+          listener.sessions = session;
         }
-        catch(err){
-            let session=Map(String,Number);
-            session.set(topic,1);
-            listener.sessions=session;
-        }
 
-          await listener.save();
+        listener_data = await listener.save();
       }
       //The User is being a first time listener
-      else{
-        let session=new Map(String,Number);
-        session.set(topic,1)
+      else {
+        let session = new Map(String, Number);
+        session.set(topic, 1);
         let listener = new Listener({
-        userId: user._id,
-        isOnline: true,
-        //adding session
-        sessions: session});
-        await listener.save();
-        };
+          userId: user._id,
+          isOnline: true,
+          //adding session
+          sessions: session,
+        });
+
+        listener_data = await listener.save();
+      }
+    } else {
+      return { error: "User does not exists" };
     }
-    else    
-    {
-        return {error:"User does not exists"}
-}
 
-return { room:topic};
-}
-catch(err){
-    return {
-        error:err
-        };
- 
+    return { listenerId: listener_data._id };
+  } catch (err) {
+    return { error: err };
+  }
 };
-}
-

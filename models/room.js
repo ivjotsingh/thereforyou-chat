@@ -9,7 +9,7 @@ const RoomSchema = mongoose.Schema({
     minlength: 4,
   },
   users: {
-    type: Array,
+    type: [mongoose.Schema.Types.ObjectId],
     maxlength: 2,
     minlength: 1,
   },
