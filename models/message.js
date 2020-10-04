@@ -4,8 +4,8 @@ const MessageSchema = mongoose.Schema({
   messageText: {
     type: String,
     required: true,
-    max: 1500,
-    min: 1,
+    maxlength: 1500,
+    minlength: 1,
   },
   from: {
     type: mongoose.Schema.Types.ObjectId, //user_id

@@ -1,14 +1,16 @@
 const mongoose = require("mongoose");
 
-const Topic = require("./topic");
-
 const ListenerSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     unique: true,
   },
-  isActive: {
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
+  isAvailable: {
     type: Boolean,
     default: false,
   },

@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
 
 const MemberSchema = mongoose.Schema({
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     unique: true,
   },
-  isActive: {
+  isOnline: {
     type: Boolean,
     default: false,
   },
-  sessions: [
-    {
-      topic: {
-        type: Map,
-        of: Number,
-        required: "Enter topic ",
-      },
-    },
-  ],
+  isAvailable: {
+    type: Boolean,
+    default: false,
+  },
+  sessions: {
+    //Map of session name to rating
+    type: Map,
+    of: Number,
+    required: "Enter topic ",
+  },
   overallRating: {
     type: Number,
     default: 0,

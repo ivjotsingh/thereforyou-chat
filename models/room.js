@@ -5,13 +5,18 @@ const RoomSchema = mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    max: 40,
-    min: 4,
+    maxlength: 40,
+    minlength: 4,
   },
   users: {
     type: Array,
-    max: 2,
-    min: 1,
+    maxlength: 2,
+    minlength: 1,
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
