@@ -14,7 +14,6 @@ const addUser = ({ id, name, userType, topic }) => {
   // if (existingUser) return { error: "Username is taken." };
 
   // const user = { id, name, room };
-  let error, room;
   if (userType == "listener") {
     return createListener(name, userType, topic);
   } else if (userType == "member") {
