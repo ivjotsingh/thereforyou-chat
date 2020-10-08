@@ -8,7 +8,7 @@ const {
   removeUser,
   getUser,
   getUsersInRoom,
-} = require("./controllers/users");
+} = require("./users/users");
 
 const router = require("./router.js");
 

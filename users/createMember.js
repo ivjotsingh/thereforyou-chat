@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const Member = require("../models/member");
+const User = require("./user");
+const Member = require("./member");
 
 /*Will create Member if the user is not already a Member,
 else just add a session to already created Member*/

@@ -1,4 +1,4 @@
-const Room=require("../models/room");
+const Room=require("../message/room");
 
 /* Will create room only if room doesn't exists,
 if room exists , just add user to room */

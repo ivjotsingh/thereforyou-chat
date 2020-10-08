@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const Listener = require("../models/listener");
+const User = require("./user");
+const Listener = require("./listener");
 
 /*Will create Listener if the user is not already a listener,
 else just add a session to already created Listener*/
