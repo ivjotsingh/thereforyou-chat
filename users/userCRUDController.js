@@ -9,10 +9,10 @@ const addUser = ({ id, name, userType, topic }) => {
   if (!name || !topic) return { error: "Username and topic are required." };
 
   if (userType == "listener" || userType == "member") {
-    let { error, listenerId } = createSessionUser(name, userType, topic);
+    let { error, sessioUserID } = createSessionUser(name, userType, topic);
 
     if (!error) {
-      const { error1, room } = createRoom(listenerId, topic);
+      const { error1, room } = createRoom(sessioUserID, topic);
       if (error1) return { error: error1 };
       else return { name, room };
     } else {

@@ -58,7 +58,7 @@ exports.CreateSessionUser= async (name, userType,topic) => {
       return { error: "User does not exists" };
     }
 
-    return { userId: sessionUserData._id };
+    return { user: sessionUser };
   } 
   catch (err) {
     return { error: err };
