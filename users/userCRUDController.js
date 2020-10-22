@@ -1,6 +1,5 @@
 const users = [];
-const createListener = require("./createListener");
-const createMember = require("./createMember");
+const createSessionUser = require("./createSessionUser");
 
 const addUser = ({ id, name, userType, topic }) => {
   name.trim().toLowerCase();
@@ -9,21 +8,11 @@ const addUser = ({ id, name, userType, topic }) => {
 
   if (!name || !topic) return { error: "Username and topic are required." };
 
-  if (userType == "listener") {
-    let { error, listenerId } = createListener(name, userType, topic);
+  if (userType == "listener" || userType == "member") {
+    let { error, listenerId } = createSessionUser(name, userType, topic);
 
     if (!error) {
       const { error1, room } = createRoom(listenerId, topic);
-      if (error1) return { error: error1 };
-      else return { name, room };
-    } else {
-      return { error };
-    }
-  } else if (userType == "member") {
-    let { error, memberId } = createMember(name, userType, topic);
-
-    if (!error) {
-      const { error1, room } = createRoom(memberId, topic);
       if (error1) return { error: error1 };
       else return { name, room };
     } else {

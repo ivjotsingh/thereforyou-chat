@@ -8,7 +8,7 @@ const {
   removeUser,
   getUser,
   getUsersInRoom,
-} = require("./users/users");
+} = require("./users/userCRUDController");
 
 const router = require("./router.js");
 
@@ -24,23 +24,23 @@ app.use(router);
 io.on("connect", (socket) => {
   socket.on("join", ({ name, userType, room }, callback) => {
     console.log("has joined");
-    const { error, user } = addUser({ id: socket.id, name, userType, room });
+    const { error, name,room } = addUser({ id: socket.id, name, userType, room });
 
     if (error) return callback(error);
-
-    socket.join(user.room);
-
+    //TODO: Create Room , call createRoom utility here
+    socket.join(room);
+    
     socket.emit("message", {
       user: "admin",
-      text: `${user.name}, welcome to room ${user.room}.`,
+      text: `${name}, welcome to room ${room}.`,
     });
     socket.broadcast
-      .to(user.room)
-      .emit("message", { user: "admin", text: `${user.name} has joined!` });
+      .to(room)
+      .emit("message", { user: "admin", text: `${name} has joined!` });
 
-    io.to(user.room).emit("roomData", {
-      room: user.room,
-      users: getUsersInRoom(user.room),
+    io.to(room).emit("roomData", {
+      room: room,
+      users: getUsersInRoom(room),
     });
 
     callback();
