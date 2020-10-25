@@ -1,4 +1,3 @@
-const users = [];
 const createSessionUser = require("./createSessionUser");
 
 const addUser = ({ id, name, userType, topic }) => {
@@ -9,12 +8,12 @@ const addUser = ({ id, name, userType, topic }) => {
   if (!name || !topic) return { error: "Username and topic are required." };
 
   if (userType == "listener" || userType == "member") {
-    let { error, sessioUserID } = createSessionUser(name, userType, topic);
+    let { error, user } = createSessionUser(name, userType, topic);
 
     if (!error) {
-      const { error1, room } = createRoom(sessioUserID, topic);
-      if (error1) return { error: error1 };
-      else return { name, room };
+      const { error, room } = createRoom(user, topic);
+      if (error) return { error: error };
+      else return { user, room };
     } else {
       return { error };
     }
@@ -31,6 +30,4 @@ const removeUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id);
 
-const getUsersInRoom = (room) => users.filter((user) => user.room === room);
-
-module.exports = { addUser, removeUser, getUser, getUsersInRoom };
+module.exports = { addUser, removeUser, getUser };
