@@ -4,10 +4,7 @@ const socketio = require("socket.io");
 const cors = require("cors");
 require("dotenv/config");
 
-const {
-  addUser,
-  getUser,
-} = require("./users/userCRUDController");
+const addUser= require("./users/addUser");
 
 const getUsersInRoom = require("./room/getUsersInRoom")
 const removeUser = require("./users/removeUser");
@@ -43,18 +40,17 @@ io.on("connect", (socket) => {
 
     io.to(room._id).emit("roomData", {
       room: room,
-      // TODO: Add error handling for getUsersInRoom ,check how the emit section can propagate error to callback
       users: getUsersInRoom(room),
     });
 
     callback();
   });
 
-  socket.on("sendMessage", (message, callback) => {
-    const user = getUser(socket.id);
+  socket.on("sendMessage", (message, userId,roomId,userType,callback) => {
+    const {user} = getUser(userId,userType);
 
-    io.to(room._id).emit("message", { user: user, text: message });
-
+    io.to(roomId).emit("message", { user: user, text: message });
+    //This callback can be used to notify or indicate that message is sent!
     callback();
   });
 

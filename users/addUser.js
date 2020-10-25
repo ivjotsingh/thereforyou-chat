@@ -1,6 +1,6 @@
 const createSessionUser = require("./createSessionUser");
 
-const addUser = ({ id, name, userType, topic }) => {
+exports.addUser = async ({ id, name, userType, topic }) => {
   name.trim().toLowerCase();
   topic.trim().toLowerCase();
   userType.trim().toLowerCase();
@@ -21,8 +21,3 @@ const addUser = ({ id, name, userType, topic }) => {
     return { error: "Invalid user type." };
   }
 };
-
-
-const getUser = (id) => users.find((user) => user.id === id);
-
-module.exports = { addUser, removeUser, getUser };
