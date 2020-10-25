@@ -6,11 +6,11 @@ require("dotenv/config");
 
 const {
   addUser,
-  removeUser,
   getUser,
 } = require("./users/userCRUDController");
 
 const getUsersInRoom = require("./room/getUsersInRoom")
+const removeUser = require("./users/removeUser");
 
 const router = require("./router.js");
 
@@ -27,7 +27,7 @@ app.use(router);
 io.on("connect", (socket) => {
   socket.on("join", ({ name, userType, room }, callback) => {
     console.log("has joined");
-    const { error, user,room } = addUser({ id: socket.id, name, userType, room });
+    const { error,name, user,room } = addUser({ id: socket.id, name, userType, room });
 
     if (error) return callback(error);
 
@@ -35,11 +35,11 @@ io.on("connect", (socket) => {
     
     socket.emit("message", {
       user: "admin",
-      text: `${user.name}, welcome to room ${room.name}.`,
+      text: `${name}, welcome to room ${room.name}.`,
     });
     socket.broadcast
       .to(room._id)
-      .emit("message", { user: "admin", text: `${user.name} has joined!` });
+      .emit("message", { user: "admin", text: `${name} has joined!` });
 
     io.to(room._id).emit("roomData", {
       room: room,
@@ -58,19 +58,20 @@ io.on("connect", (socket) => {
     callback();
   });
 
-  socket.on("disconnect", () => {
-    const user = removeUser(socket.id);
+  socket.on("disconnect", (userName,userType,roomId,callback) => {
+    const {error,name} = removeUser(userName,userType);
+    if (error) return callback(error);
 
-    if (user) {
-      io.to(room._id).emit("message", {
+    if (name) {
+      io.to(roomId).emit("message", {
         user: "Admin",
-        text: `${user.name} has left.`,
+        text: `${userName} has left.`,
       });
-      io.to(room._id).emit("roomData", {
-        room: user.room,
-        users: getUsersInRoom(room),
+      io.to(roomId).emit("roomData", {
+        users: getUsersInRoom(roomId),
       });
     }
+    callback();
   });
 });
 

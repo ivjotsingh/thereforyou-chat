@@ -38,6 +38,7 @@ exports.createSessionUser= async (name, userType,topic) => {
           session.set(topic, 1);
           sessionUser.sessions = session;
         }
+        sessionUser.isOnline = true;
         sessionUserData = await sessionUser.save();
       }
       //The User is being a first time listener/member
@@ -50,6 +51,8 @@ exports.createSessionUser= async (name, userType,topic) => {
           //adding session
           sessions: session,
         });
+
+        sessionUser.isOnline=True;
         sessionUserData = await sessionUser.save();
       }
       

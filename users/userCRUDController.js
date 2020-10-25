@@ -8,7 +8,7 @@ const addUser = ({ id, name, userType, topic }) => {
   if (!name || !topic) return { error: "Username and topic are required." };
 
   if (userType == "listener" || userType == "member") {
-    let { error, user } = createSessionUser(name, userType, topic);
+    let { error,name, user } = createSessionUser(name, userType, topic);
 
     if (!error) {
       const { error, room } = createRoom(user, topic);
@@ -22,11 +22,6 @@ const addUser = ({ id, name, userType, topic }) => {
   }
 };
 
-const removeUser = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-
-  if (index !== -1) return users.splice(index, 1)[0];
-};
 
 const getUser = (id) => users.find((user) => user.id === id);
 
