@@ -4,11 +4,10 @@ const socketio = require("socket.io");
 const cors = require("cors");
 require("dotenv/config");
 
+/*Importing Services*/
 const addUser= require("./users/addUser");
-
 const getUsersInRoom = require("./room/getUsersInRoom")
 const removeUser = require("./users/removeUser");
-
 const router = require("./router.js");
 
 const app = express();
@@ -22,9 +21,9 @@ app.use(cors());
 app.use(router);
 
 io.on("connect", (socket) => {
-  socket.on("join", ({ name, userType, room }, callback) => {
+  socket.on("join", ({ name, userType, topic }, callback) => {
     console.log("has joined");
-    const { error,name, user,room } = addUser({ id: socket.id, name, userType, room });
+    const { error, user,room } = addUser({ id: socket.id, name, userType, topic });
 
     if (error) return callback(error);
 

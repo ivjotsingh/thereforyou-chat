@@ -61,7 +61,7 @@ exports.createSessionUser= async (name, userType,topic) => {
       return { error: "User does not exists" };
     }
 
-    return { user: sessionUser };
+    return {name:user.userName, user: sessionUser };
   } 
   catch (err) {
     return { error: err };

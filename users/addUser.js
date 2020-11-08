@@ -13,7 +13,7 @@ exports.addUser = async ({ id, name, userType, topic }) => {
     if (!error) {
       const { error, room } = createRoom(user, topic);
       if (error) return { error: error };
-      else return { user, room };
+      else return {user, room };
     } else {
       return { error };
     }
