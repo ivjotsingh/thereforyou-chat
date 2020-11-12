@@ -1,6 +1,6 @@
 const Room = require("../room/room")
 
-exports.getUsersInRoom = async (room)=>{
+getUsersInRoom = async (room)=>{
     try{
     let sessionUsers = await Room.find({_id : room._id});
     let sessionUsersId =[];
@@ -12,4 +12,6 @@ exports.getUsersInRoom = async (room)=>{
     catch(err){
         return {error:err};
     }
-}
+};
+
+module.exports=getUsersInRoom;

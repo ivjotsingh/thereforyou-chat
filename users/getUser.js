@@ -1,7 +1,6 @@
 const Listener = require("./users/listener");
 const Member = require("./users/member");
-
-exports.getUser = async (userId,userType) => {
+getUser = async (userId,userType) => {
     let sessionUserModel;
     if (userType == "listener"){
         sessionUserModel = Listener;
@@ -11,4 +10,6 @@ exports.getUser = async (userId,userType) => {
     }
     let sessionUser = await sessionUserModel.findOne({user:userId});
     return sessionUser;
-}
+};
+
+module.exports=getUser;

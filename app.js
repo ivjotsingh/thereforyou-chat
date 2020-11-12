@@ -23,7 +23,7 @@ app.use(router);
 io.on("connect", (socket) => {
   socket.on("join", ({ name, userType, topic }, callback) => {
     console.log("has joined");
-    const { error, user,room } = addUser({ id: socket.id, name, userType, topic });
+    const { error, user,room } = addUser({ id : socket.id, name, userType, topic });
 
     if (error) return callback(error);
 

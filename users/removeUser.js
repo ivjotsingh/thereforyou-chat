@@ -2,7 +2,7 @@ const Listener = require("./listener");
 const Member = require("./member");
 const User = require("./user");
 
-exports.removeUser = async(userName,userType) => {
+removeUser = async(userName,userType) => {
     try{
         let sessionUser;
         if (userType != "listener" || userType != "member"){
@@ -27,4 +27,6 @@ exports.removeUser = async(userName,userType) => {
         return {error:err}
     }
 
-}
+};
+
+module.exports=removeUser;

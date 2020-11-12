@@ -7,7 +7,7 @@ else just add a session to already created Listener/Member*/
 
 /*Listener or Member to be collectively referred as SessionUser*/
 
-exports.createSessionUser= async (name, userType,topic) => {
+createSessionUser= async (name, userType,topic) => {
   try {
     //dependency to create a SessionUser
     let user = User.findOne({
@@ -67,3 +67,5 @@ exports.createSessionUser= async (name, userType,topic) => {
     return { error: err };
   }
 };
+
+module.exports=createSessionUser;

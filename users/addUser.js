@@ -1,13 +1,14 @@
 const createSessionUser = require("./createSessionUser");
 
-exports.addUser = async ({ id, name, userType, topic }) => {
+addUser = async ({ id, name, userType, topic }) => {
   name.trim().toLowerCase();
   topic.trim().toLowerCase();
   userType.trim().toLowerCase();
 
   if (!name || !topic) return { error: "Username and topic are required." };
 
-  if (userType == "listener" || userType == "member") {
+  if (userType === "listener" || userType === "member") {
+    console.log("It is listener or member")
     let { error,name, user } = createSessionUser(name, userType, topic);
 
     if (!error) {
@@ -21,3 +22,5 @@ exports.addUser = async ({ id, name, userType, topic }) => {
     return { error: "Invalid user type." };
   }
 };
+
+module.exports= addUser;
