@@ -9,21 +9,25 @@ const addUser= require("./users/addUser");
 const getUsersInRoom = require("./room/getUsersInRoom")
 const removeUser = require("./users/removeUser");
 const router = require("./router.js");
-
+const connectDb = require("./config/db");
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
 const PORT = process.env.PORT || 5000;
 
+connectDb();
+
 app.use(cors());
 
 app.use(router);
 
 io.on("connect", (socket) => {
-  socket.on("join", ({ name, userType, topic }, callback) => {
+  socket.on("join", async  ({ name, userType, topic }, callback) => {
     console.log("has joined");
-    const { error, user,room } = addUser({ id : socket.id, name, userType, topic });
+    try{
+    const { error, user,room } = await addUser({ id : socket.id, name, userType, topic });
+    
 
     if (error) return callback(error);
 
@@ -41,8 +45,12 @@ io.on("connect", (socket) => {
       room: room,
       users: getUsersInRoom(room),
     });
-
     callback();
+  }
+  catch(err){
+    return {err:error}
+  }
+    
   });
 
   socket.on("sendMessage", (message, userId,roomId,userType,callback) => {
