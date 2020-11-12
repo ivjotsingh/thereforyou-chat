@@ -17,15 +17,11 @@ createSessionUser= async (name, userType,topic) => {
 
     if (user) {
       let userModel;
-      console.log(userType)
       if (userType==="listener")
       {
-
-        console.log("Creating listener")
         userModel=Listener;
       }
       else{
-        console.log(user)
         userModel=Member;
       }
       let sessionUser = await userModel.findOne({ userId: user._id });
@@ -33,7 +29,6 @@ createSessionUser= async (name, userType,topic) => {
 
       //If User already been a SessionUser before
       if (sessionUser) {
-        console.log("arey baba")
         try {
           let sessionCount = user.sessions.get(topic);
           let session = Map(String, Number);
@@ -49,7 +44,6 @@ createSessionUser= async (name, userType,topic) => {
       }
       //The User is being a first time listener/member
       else {
-        console.log("creating a new session user and adding session")
         let session = new Map(String, Number);
         session.set(topic, 1);
         let sessionUser = new userModel({

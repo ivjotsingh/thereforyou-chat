@@ -10,6 +10,7 @@ const getUsersInRoom = require("./room/getUsersInRoom")
 const removeUser = require("./users/removeUser");
 const router = require("./router.js");
 const connectDb = require("./config/db");
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
