@@ -7,6 +7,7 @@ require("dotenv/config");
 /*Importing Services*/
 const addUser= require("./users/addUser");
 const getUsersInRoom = require("./room/getUsersInRoom")
+const getUser = require("./users/getUser");
 const removeUser = require("./users/removeUser");
 const router = require("./router.js");
 const connectDb = require("./config/db");
@@ -44,7 +45,7 @@ io.on("connect", (socket) => {
 
     io.to(room._id).emit("roomData", {
       room: room,
-      users: getUsersInRoom(room),
+      users: await getUsersInRoom(room),
     });
     callback();
   }
@@ -54,10 +55,16 @@ io.on("connect", (socket) => {
     
   });
 
-  socket.on("sendMessage", (message, userId,roomId,userType,callback) => {
-    const {user} = getUser(userId,userType);
+  socket.on("sendMessage", async (message, userId,roomId,userType,callback) => {
+    try{
+    const {user} = await getUser(userId,userType);
 
     io.to(roomId).emit("message", { user: user, text: message });
+    console.log(user)
+    }
+    catch(err){
+      console.log("error in sending message");
+    }
     //This callback can be used to notify or indicate that message is sent!
     callback();
   });

@@ -1,5 +1,5 @@
-const Listener = require("./users/listener");
-const Member = require("./users/member");
+const Listener = require("./listener");
+const Member = require("./member");
 getUser = async (userId,userType) => {
     let sessionUserModel;
     if (userType == "listener"){
