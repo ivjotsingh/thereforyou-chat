@@ -55,7 +55,7 @@ io.on("connect", (socket) => {
     
   });
 
-  socket.on("sendMessage", async (message, userId,roomId,userType,callback) => {
+  socket.on("sendMessage", async ({message, userId,roomId,userType}, callback) => {
     try{
     const {user} = await getUser(userId,userType);
 
@@ -69,21 +69,31 @@ io.on("connect", (socket) => {
     callback();
   });
 
-  socket.on("disconnect", (userName,userType,roomId,callback) => {
-    const {error,name} = removeUser(userName,userType);
-    if (error) return callback(error);
+  // socket.on("disconnect", (reason, userName, userType, roomId) => {
+  //   if (reason === 'io server disconnect' || reason === 'transport close') {
+  //     // the disconnection was initiated by the server, you need to reconnect manually
+  //     // socket.connect();
+  //     // console.log("connected again")
+  //   }
+  //   console.log("1")
+  //   console.log(userName)
+  //   console.log("2")
+  //   console.log(userType)
+  //   console.log(roomId)
+  //   const {error,name} = removeUser(userName,userType);
+  //   // if (error) return callback(error);
 
-    if (name) {
-      io.to(roomId).emit("message", {
-        user: "Admin",
-        text: `${userName} has left.`,
-      });
-      io.to(roomId).emit("roomData", {
-        users: getUsersInRoom(roomId),
-      });
-    }
-    callback();
-  });
-});
+  //   if (name) {
+  //     io.to(roomId).emit("message", {
+  //       user: "Admin",
+  //       text: `${userName} has left.`,
+  //     });
+  //     io.to(roomId).emit("roomData", {
+  //       users: getUsersInRoom(roomId),
+  //     });
+  //   }
+  // });
+}
+);
 
 server.listen(PORT, () => console.log(`Server has started. ${PORT}`));
