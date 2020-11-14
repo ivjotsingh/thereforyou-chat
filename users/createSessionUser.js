@@ -14,7 +14,7 @@ createSessionUser= async (name, userType,topic) => {
     let user = await User.findOne({
       userName: name,
     });
-
+    console.log(user)
     if (user) {
       let userModel;
       if (userType==="listener")
@@ -25,6 +25,7 @@ createSessionUser= async (name, userType,topic) => {
         userModel=Member;
       }
       let sessionUser = await userModel.findOne({ userId: user._id });
+      console.log(sessionUser)
       let sessionUserData;
 
       //If User already been a SessionUser before

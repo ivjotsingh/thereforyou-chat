@@ -47,7 +47,9 @@ io.on("connect", (socket) => {
       room: room,
       users: await getUsersInRoom(room),
     });
-    callback();
+    const room_id = '123'
+    console.log(room_id)
+    callback(room_id);
   }
   catch(err){
     return {err:error}
@@ -56,6 +58,11 @@ io.on("connect", (socket) => {
   });
 
   socket.on("sendMessage", async ({message, userId,roomId,userType}, callback) => {
+    console.log("message received")
+    console.log(message)
+    console.log(userId)
+    console.log(roomId)
+    console.log(userType)
     try{
     const {user} = await getUser(userId,userType);
 
