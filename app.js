@@ -27,32 +27,35 @@ app.use(router);
 io.on("connect", (socket) => {
   socket.on("join", async  ({ name, userType, topic }, callback) => {
     console.log("has joined");
+
     try{
     const { error, user,room } = await addUser({ id : socket.id, name, userType, topic });
     
+    // if (error) return callback(error);
+    // uncomment this line and resolve user does not exist thing.
 
-    if (error) return callback(error);
-
-    socket.join(room._id);
+    const room_id = '1234'
+    
+    // uncomment this line and resolve error.
+    // socket.join(room._id);
     
     socket.emit("message", {
       user: "admin",
-      text: `${name}, welcome to room ${room.name}.`,
+      text: `${name}, welcome to room ${room_id}.`,
     });
     socket.broadcast
-      .to(room._id)
+      .to(room_id)
       .emit("message", { user: "admin", text: `${name} has joined!` });
 
-    io.to(room._id).emit("roomData", {
+    io.to(room_id).emit("roomData", {
       room: room,
       users: await getUsersInRoom(room),
     });
-    const room_id = '123'
-    console.log(room_id)
-    callback(room_id);
+    callback({"room_id" : room_id});
   }
   catch(err){
-    return {err:error}
+    console.log(err)
+    return {err:err}
   }
     
   });
