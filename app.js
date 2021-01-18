@@ -5,8 +5,8 @@ const cors = require("cors");
 require("dotenv/config");
 
 /*Importing Services*/
-const addUser= require("./users/addUser");
-const getUsersInRoom = require("./room/getUsersInRoom")
+const addUser = require("./users/addUser");
+const getUsersInRoom = require("./room/getUsersInRoom");
 const getUser = require("./users/getUser");
 const removeUser = require("./users/removeUser");
 const router = require("./router.js");
@@ -25,59 +25,63 @@ app.use(cors());
 app.use(router);
 
 io.on("connect", (socket) => {
-  socket.on("join", async  ({ name, userType, topic }, callback) => {
-    console.log("has joined");
+  socket.on("join", async ({ name, userType, topic }, callback) => {
+    try {
+      console.log(name + " has joined");
+      const { error, user, room } = await addUser({
+        id: socket.id,
+        name,
+        userType,
+        topic,
+      });
 
-    try{
-    const { error, user,room } = await addUser({ id : socket.id, name, userType, topic });
-    
-    // if (error) return callback(error);
-    // uncomment this line and resolve user does not exist thing.
+      // if (error) return callback(error);
+      // uncomment this line and resolve user does not exist thing.
 
-    const room_id = '1234'
-    
-    // uncomment this line and resolve error.
-    // socket.join(room._id);
-    
-    socket.emit("message", {
-      user: "admin",
-      text: `${name}, welcome to room ${room_id}.`,
-    });
-    socket.broadcast
-      .to(room_id)
-      .emit("message", { user: "admin", text: `${name} has joined!` });
+      const room_id = "1234";
 
-    io.to(room_id).emit("roomData", {
-      room: room,
-      users: await getUsersInRoom(room),
-    });
-    callback({"room_id" : room_id});
-  }
-  catch(err){
-    console.log(err)
-    return {err:err}
-  }
-    
+      // uncomment this line and resolve error.
+      // socket.join(room._id);
+
+      socket.emit("message", {
+        user: "admin",
+        text: `${name}, welcome to room ${room_id}.`,
+      });
+      socket.broadcast
+        .to(room_id)
+        .emit("message", { user: "admin", text: `${name} has joined!` });
+
+      io.to(room_id).emit("roomData", {
+        room: room,
+        users: await getUsersInRoom(room),
+      });
+      callback({ room_id: room_id });
+    } catch (err) {
+      console.log(err);
+      return { err: err };
+    }
   });
 
-  socket.on("sendMessage", async ({message, userId,roomId,userType}, callback) => {
-    console.log("message received")
-    console.log(message)
-    console.log(userId)
-    console.log(roomId)
-    console.log(userType)
-    try{
-    const {user} = await getUser(userId,userType);
+  socket.on(
+    "sendMessage",
+    async ({ message, userId, roomId, userType }, callback) => {
+      console.log("message received");
+      console.log(message);
+      console.log(userId);
+      console.log(roomId);
+      console.log(userType);
+      try {
+        const { user } = await getUser(userId, userType);
 
-    io.to(roomId).emit("message", { user: user, text: message });
-    console.log(user)
+        io.to(roomId).emit("message", { user: user, text: message });
+        console.log(user);
+      } catch (err) {
+        console.log("error in sending message");
+      }
+      //This callback can be used to notify or indicate that message is sent!
+      callback();
     }
-    catch(err){
-      console.log("error in sending message");
-    }
-    //This callback can be used to notify or indicate that message is sent!
-    callback();
-  });
+  );
 
   // socket.on("disconnect", (reason, userName, userType, roomId) => {
   //   if (reason === 'io server disconnect' || reason === 'transport close') {
@@ -103,7 +107,6 @@ io.on("connect", (socket) => {
   //     });
   //   }
   // });
-}
-);
+});
 
 server.listen(PORT, () => console.log(`Server has started. ${PORT}`));

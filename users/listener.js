@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const ListenerSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
+  userName: {
+    type: String,
     required: true,
     unique: true,
   },
